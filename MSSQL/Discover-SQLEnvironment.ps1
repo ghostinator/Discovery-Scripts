@@ -210,9 +210,12 @@ function Write-ExcelXmlWorkbook {
     [void]$sb.AppendLine('</Styles>')
 
     foreach ($key in $Sheets.Keys) {
-        $rows = @($Sheets[$key])
-        [void]$sb.AppendLine((ConvertTo-ExcelXmlWorksheet -WorksheetName $key -Rows $rows))
+    $rows = @($Sheets[$key])
+    if ($rows.Count -eq 0 -or ($rows.Count -eq 1 -and $null -eq $rows[0])) {
+        $rows = @([pscustomobject]@{ Status = 'No data collected' })
     }
+    [void]$sb.AppendLine((ConvertTo-ExcelXmlWorksheet -WorksheetName $key -Rows $rows))
+}
 
     [void]$sb.AppendLine('</Workbook>')
     $sb.ToString() | Out-File -FilePath $Path -Encoding utf8
