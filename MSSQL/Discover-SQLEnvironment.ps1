@@ -219,7 +219,7 @@ function Write-ExcelXmlWorkbook {
 }
 
 function DataTable-ToPsObject {
-    param([System.Data.DataTable]$DataTable)
+    param([object]$DataTable)
 
     $rows = @()
     foreach ($row in $DataTable.Rows) {
@@ -253,7 +253,7 @@ function Invoke-SqlQuery {
         $cmd.CommandTimeout = $CommandTimeout
         $adapter = New-Object System.Data.SqlClient.SqlDataAdapter $cmd
         [void]$adapter.Fill($dt)
-        return $dt
+        return ,$dt
     }
     finally {
         if ($adapter) { $adapter.Dispose() }
